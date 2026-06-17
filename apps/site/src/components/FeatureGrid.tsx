@@ -5,22 +5,26 @@ const icons = [TrailIcon, FailureIcon, QuirkIcon, ActionIcon, PortableIcon, Fres
 
 export function FeatureGrid() {
   return (
-    <section className="section" id="features">
+    <section className="section feature-strip" id="features">
       <div className="section-heading reveal reveal--one">
-        <p className="section-kicker">Track the parts that actually survive context windows.</p>
-        <h2>Structured task state for the moments transcripts fail you.</h2>
+        <p className="section-kicker">The parts that should survive context windows.</p>
+        <h2>Not memory theater. Durable task primitives.</h2>
       </div>
 
-      <div className="feature-grid">
+      <div className="feature-strip__rail">
         {featureCards.map((feature, index) => {
           const Icon = icons[index];
+
           return (
-            <article className={`feature-card reveal reveal--${(index % 3) + 1}`} key={feature.title}>
-              <div className="feature-card__icon">
+            <article className={`feature-band reveal reveal--${(index % 3) + 1}`} key={feature.title}>
+              <div className="feature-band__icon">
                 <Icon width={24} height={24} />
               </div>
-              <h3>{feature.title}</h3>
-              <p>{feature.description}</p>
+              <div className="feature-band__copy">
+                <p>{feature.meta}</p>
+                <h3>{feature.title}</h3>
+                <span>{feature.description}</span>
+              </div>
             </article>
           );
         })}

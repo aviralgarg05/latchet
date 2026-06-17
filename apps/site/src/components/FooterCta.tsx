@@ -1,4 +1,5 @@
 import { BrandMark } from "./BrandMark";
+import { ArrowUpRightIcon } from "./Icons";
 
 export function FooterCta() {
   return (
@@ -15,8 +16,9 @@ export function FooterCta() {
         <div className="footer-cta__actions">
           <a className="button button--primary button--light" href="https://github.com/aviralgarg05/latchet" target="_blank" rel="noreferrer">
             Explore the repo
+            <ArrowUpRightIcon width={16} height={16} />
           </a>
-          <a className="button button--ghost button--light" href="#tooling">
+          <a className="button button--ghost button--light" href="#workflow">
             Read the workflow
           </a>
         </div>

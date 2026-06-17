@@ -1,4 +1,19 @@
+import { useState } from "react";
+import { heroEvents } from "../content";
+import { ActionIcon, ArrowUpRightIcon, FailureIcon, FreshnessIcon, OrbitIcon, QuirkIcon, TrailIcon } from "./Icons";
+
+const eventIcons = {
+  decision: TrailIcon,
+  failure: FailureIcon,
+  quirk: QuirkIcon,
+  action: ActionIcon
+} as const;
+
 export function Hero() {
+  const [activeId, setActiveId] = useState(heroEvents[0].id);
+  const activeEvent = heroEvents.find((event) => event.id === activeId) ?? heroEvents[0];
+  const ActiveIcon = eventIcons[activeEvent.id as keyof typeof eventIcons];
+
   return (
     <section className="hero section section--top" id="top">
       <div className="hero__copy reveal reveal--one">
@@ -11,62 +26,96 @@ export function Hero() {
           Latchet keeps decisions, failed attempts, environment quirks, and the next action in one local ledger so each coding agent starts from real task state instead of chat residue.
         </p>
         <div className="hero__actions">
-          <a className="button button--primary" href="#tooling">
+          <a className="button button--primary" href="#workflow">
             See the workflow
+            <ArrowUpRightIcon width={16} height={16} />
           </a>
           <a className="button button--ghost" href="https://github.com/aviralgarg05/latchet" target="_blank" rel="noreferrer">
             View on GitHub
           </a>
         </div>
+
         <div className="hero__terminal">
           <span className="hero__prompt">$ latchet init</span>
-          <span className="hero__caption">Create a durable source of truth in <code>.taskledger/</code>.</span>
+          <span className="hero__caption">
+            Create a durable source of truth in <code>.taskledger/</code>.
+          </span>
         </div>
       </div>
 
-      <div className="mockup reveal reveal--two" aria-label="Latchet product mockup">
-        <div className="mockup__chrome">
-          <span />
-          <span />
-          <span />
-          <p>task / org-rbac / state</p>
+      <div className="ledger-stage reveal reveal--two" aria-label="Interactive Latchet ledger preview">
+        <div className="ledger-stage__halo" />
+
+        <div className="ledger-stage__events">
+          {heroEvents.map((event) => {
+            const Icon = eventIcons[event.id as keyof typeof eventIcons];
+            const isActive = event.id === activeEvent.id;
+
+            return (
+              <button
+                type="button"
+                className={`event-chip event-chip--${event.accent}${isActive ? " is-active" : ""}`}
+                key={event.id}
+                onMouseEnter={() => setActiveId(event.id)}
+                onFocus={() => setActiveId(event.id)}
+                onClick={() => setActiveId(event.id)}
+              >
+                <Icon width={18} height={18} />
+                <span>{event.label}</span>
+              </button>
+            );
+          })}
         </div>
 
-        <div className="mockup__tabs">
-          <span className="is-active">State</span>
-          <span>Timeline</span>
-          <span>Artifacts</span>
-          <span>Questions</span>
-        </div>
-
-        <div className="mockup__body">
-          <div className="mockup__cluster">
-            <div className="mockup__card mockup__card--decision">
-              <p className="mockup__label">Decision</p>
-              <h3>Use PostgreSQL row-level security</h3>
-              <p>Tenant isolation must hold outside the API too.</p>
-            </div>
-
-            <div className="mockup__card mockup__card--failure">
-              <p className="mockup__label">Failure</p>
-              <h3>Fixture users missing organization_id</h3>
-              <p>Integration tests still fail on scoped claims.</p>
-            </div>
+        <div className="ledger-shell">
+          <div className="ledger-shell__bar">
+            <span />
+            <span />
+            <span />
+            <p>task / org-rbac / active state</p>
           </div>
 
-          <div className="mockup__rail">
-            <div className="mockup__mini">
-              <p className="mockup__label">Env quirk</p>
-              <p><code>FEATURE_TENANT_RBAC=1</code> must be set for local test runs.</p>
+          <div className="ledger-shell__body">
+            <div className="ledger-shell__orbit">
+              <div className="orbit-node orbit-node--one">
+                <TrailIcon width={18} height={18} />
+              </div>
+              <div className="orbit-node orbit-node--two">
+                <FailureIcon width={18} height={18} />
+              </div>
+              <div className="orbit-node orbit-node--three">
+                <QuirkIcon width={18} height={18} />
+              </div>
+              <div className={`orbit-core orbit-core--${activeEvent.accent}`}>
+                <ActiveIcon width={26} height={26} />
+              </div>
             </div>
-            <div className="mockup__mini mockup__mini--action">
-              <p className="mockup__label">Next action</p>
-              <p>Patch auth fixtures, rerun tenant tests, and verify branch freshness.</p>
-            </div>
-            <div className="mockup__status">
-              <span>git: main @ 89f2e77</span>
-              <span>artifacts: 3 tracked</span>
-              <span>freshness: 2 warnings</span>
+
+            <article className={`ledger-focus ledger-focus--${activeEvent.accent}`}>
+              <div className="ledger-focus__topline">
+                <span>{activeEvent.label}</span>
+                <span>{activeEvent.detail}</span>
+              </div>
+              <h3>{activeEvent.title}</h3>
+              <p>{activeEvent.summary}</p>
+              <code>{activeEvent.command}</code>
+            </article>
+
+            <div className="ledger-rail">
+              <div className="ledger-mini">
+                <OrbitIcon width={18} height={18} />
+                <div>
+                  <strong>Task state</strong>
+                  <p>append-only ledger, derived current-state view</p>
+                </div>
+              </div>
+              <div className="ledger-mini">
+                <FreshnessIcon width={18} height={18} />
+                <div>
+                  <strong>Freshness</strong>
+                  <p>branch main · commit 89f2e77 · 2 warnings flagged</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
