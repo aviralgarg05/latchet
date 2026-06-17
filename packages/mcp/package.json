@@ -1,0 +1,13 @@
+{
+  "name": "@latchet/mcp",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@latchet/adapters": "file:../adapters",
+    "@latchet/core": "file:../core",
+    "zod": "^4.4.3"
+  }
+}

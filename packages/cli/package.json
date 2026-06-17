@@ -1,0 +1,15 @@
+{
+  "name": "@latchet/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "ledger": "./dist/index.js"
+  },
+  "dependencies": {
+    "@latchet/adapters": "file:../adapters",
+    "@latchet/core": "file:../core",
+    "commander": "^15.0.0"
+  }
+}

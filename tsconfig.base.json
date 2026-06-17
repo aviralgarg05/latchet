@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "types": [
+      "node"
+    ],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "paths": {
+      "@latchet/spec": [
+        "./packages/spec/src/index.ts"
+      ],
+      "@latchet/core": [
+        "./packages/core/src/index.ts"
+      ],
+      "@latchet/adapters": [
+        "./packages/adapters/src/index.ts"
+      ]
+    }
+  }
+}
