@@ -11,6 +11,7 @@ The ledger is append-only. Handoff is a derived feature, not the primary artifac
 - CLI in [packages/cli](/Users/aviralgarg/Everything/Context Manager/packages/cli)
 - MCP server in [packages/mcp](/Users/aviralgarg/Everything/Context Manager/packages/mcp)
 - Adapter contracts and handoff prompt templates in [packages/adapters](/Users/aviralgarg/Everything/Context Manager/packages/adapters)
+- Landing site in [apps/site](/Users/aviralgarg/Everything/Context Manager/apps/site)
 - Example fixtures in [examples/fixtures](/Users/aviralgarg/Everything/Context Manager/examples/fixtures)
 
 ## Local layout
@@ -39,6 +40,14 @@ node packages/cli/dist/index.js log failure --task rbac --summary "Fixture users
 node packages/cli/dist/index.js log next_action --task rbac --summary "Patch test fixtures and rerun integration suite" --priority high
 node packages/cli/dist/index.js derive --task rbac
 node packages/cli/dist/index.js show --task rbac
+```
+
+## Landing site
+
+```bash
+npm run dev:site
+npm run build:site
+npm run preview:site
 ```
 
 ## MCP server
