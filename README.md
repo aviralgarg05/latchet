@@ -6,13 +6,13 @@ The ledger is append-only. Handoff is a derived feature, not the primary artifac
 
 ## What ships in this repo
 
-- Canonical event schema in [packages/spec](/Users/aviralgarg/Everything/Context Manager/packages/spec)
-- Projection engine, local store, markdown renderer, freshness checks, redaction, import/export, and diffing in [packages/core](/Users/aviralgarg/Everything/Context Manager/packages/core)
-- CLI in [packages/cli](/Users/aviralgarg/Everything/Context Manager/packages/cli)
-- MCP server in [packages/mcp](/Users/aviralgarg/Everything/Context Manager/packages/mcp)
-- Adapter contracts and handoff prompt templates in [packages/adapters](/Users/aviralgarg/Everything/Context Manager/packages/adapters)
-- Landing site in [apps/site](/Users/aviralgarg/Everything/Context Manager/apps/site)
-- Example fixtures in [examples/fixtures](/Users/aviralgarg/Everything/Context Manager/examples/fixtures)
+- Canonical event schema in [packages/spec](packages/spec)
+- Projection engine, local store, markdown renderer, freshness checks, redaction, import/export, and diffing in [packages/core](packages/core)
+- CLI in [packages/cli](packages/cli)
+- MCP server in [packages/mcp](packages/mcp)
+- Adapter contracts and handoff prompt templates in [packages/adapters](packages/adapters)
+- Landing site in [apps/site](apps/site)
+- Example fixtures in [examples/fixtures](examples/fixtures)
 
 ## Local layout
 
@@ -80,5 +80,5 @@ node packages/mcp/dist/index.js
 
 ## Docs
 
-- [Roadmap](/Users/aviralgarg/Everything/Context Manager/docs/roadmap.md)
-- [Marketing Strategy](/Users/aviralgarg/Everything/Context Manager/docs/marketing-strategy.md)
+- [Roadmap](docs/roadmap.md)
+- [Marketing Strategy](docs/marketing-strategy.md)
