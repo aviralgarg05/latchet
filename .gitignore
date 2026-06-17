@@ -4,3 +4,5 @@ packages/*/.tsbuildinfo
 apps/*/dist
 output
 .taskledger
+.vercel
+.env*
