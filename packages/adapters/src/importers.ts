@@ -1,5 +1,9 @@
 import type { LedgerEvent } from "@latchet/spec";
 
+function createImportId(prefix: string): string {
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
 export function importCommandOutput(taskId: string, command: string, output: string): LedgerEvent[] {
   const timestamp = new Date().toISOString();
   const base: Omit<LedgerEvent, "id" | "type" | "payload"> = {
@@ -13,7 +17,7 @@ export function importCommandOutput(taskId: string, command: string, output: str
   const events: LedgerEvent[] = [
     {
       ...base,
-      id: "cmd_evidence_1",
+      id: createImportId("cmd_evidence"),
       type: "evidence",
       payload: {
         summary: `Captured output from ${command}`,
@@ -26,7 +30,7 @@ export function importCommandOutput(taskId: string, command: string, output: str
   if (/error|failed|exception/i.test(output)) {
     events.push({
       ...base,
-      id: "cmd_failure_1",
+      id: createImportId("cmd_failure"),
       type: "failure",
       payload: {
         summary: `Command ${command} reported a failure`,

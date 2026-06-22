@@ -1,0 +1,94 @@
+LATCET OUTREACH — COPY/PASTE MESSAGES
+======================================
+
+Use after recording demo: npm run demo (screen-record terminal output)
+
+
+--- DM / EMAIL (private feedback, send to 10 people) ---
+
+Subject: quick feedback on a task ledger for coding agents?
+
+Hey [Name] — I'm building Latchet, a local task ledger for AI coding work.
+
+It keeps decisions, failed attempts, env quirks, and the next action in repo-local files so the next session doesn't repeat the same dead end.
+
+45-second demo: [YOUR_DEMO_LINK]
+GitHub: https://github.com/aviralgarg05/latchet
+
+If you use Codex / Claude Code / Cursor regularly, I'd love blunt feedback:
+1. Would you actually log failures/decisions, or is that too much overhead?
+2. What's the most painful part of resuming work across sessions?
+3. Anything confusing in the quickstart?
+
+No pressure to adopt — honest "this wouldn't help me because X" is the most useful reply.
+
+
+--- TWITTER REPLY (to Kevin Wang thread) ---
+
+That's useful. Sounds like the current workaround is either:
+1. keep tasks disjoint per tool, or
+2. use a lightweight tool-native memory layer.
+
+When you do need to switch tools, what exactly do you carry over?
+And what does the /codex skill in gbrain actually store — rules, prior commands, or full context?
+
+I'm building a local file-based task ledger (decisions + failures + next action, not transcripts). Curious if that'd be too much overhead or just enough.
+
+
+--- SHOW HN TITLE ---
+
+Show HN: Latchet – task ledger for AI coding agents
+
+
+--- SHOW HN FIRST COMMENT ---
+
+Hi HN — I built Latchet because I kept hitting the same failure across Codex/Claude Code sessions.
+
+The problem isn't missing chat history. It's missing durable task state: what was decided, what failed, what env quirk mattered, and what's next.
+
+Latchet stores that as an append-only event ledger in .taskledger/ inside your repo. Handoff to another agent is a derived export, not the primary artifact.
+
+Demo: [YOUR_DEMO_LINK]
+GitHub: https://github.com/aviralgarg05/latchet
+
+Quickstart:
+  npm install && npm run build
+  node packages/cli/dist/index.js init
+  node packages/cli/dist/index.js task create auth --title "Fix auth" --goal "Stop repeated failures"
+  node packages/cli/dist/index.js log failure --task auth --summary "Fixture users missing org_id"
+  node packages/cli/dist/index.js show --task auth
+
+v0.1 is local-first, manual logging, no cloud. Happy to answer questions about scope and what's deliberately not built yet.
+
+
+--- REDDIT r/ClaudeAI ---
+
+Title: I built a local task ledger so Claude Code sessions don't repeat the same dead end
+
+Body:
+I kept losing track of what failed vs what was decided when resuming Claude Code work the next day.
+
+Latchet stores durable task state in .taskledger/ inside your repo:
+- accepted decisions
+- failed attempts
+- env quirks
+- one next action
+
+Not a transcript dump. Append-only events, derived state.md for resume.
+
+Demo: [YOUR_DEMO_LINK]
+Repo: https://github.com/aviralgarg05/latchet
+
+Question: do you split tasks by tool to avoid context pain, or do you actually hand off between Claude Code and something else? What do you carry over when you do?
+
+
+--- X LAUNCH THREAD (tweet 1 of 3) ---
+
+I kept re-explaining the same bug to Codex/Claude Code after every session break.
+
+So I built Latchet — a local task ledger that keeps decisions, failures, env quirks, and the next action in your repo.
+
+Not AI memory. Not transcripts. Durable task state.
+
+Demo: [YOUR_DEMO_LINK]
+GitHub: https://github.com/aviralgarg05/latchet

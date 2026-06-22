@@ -20,7 +20,8 @@
   - `init` — initialize a project ledger
   - `task create` — create a new task
   - `log <type>` — append decisions, failures, env quirks, constraints, next actions, open questions, notes, artifacts
-  - `import-session` — import from Codex or Claude Code session notes
+  - `import-session` — import from structured session notes (Codex, Claude Code, Cursor, Gemini CLI)
+  - `import-command` — import test/build command output as evidence + failure events
   - `show` — render markdown state
   - `next` — display the current next action
   - `verify` — check branch, commit, artifact freshness
@@ -30,10 +31,10 @@
   - `diff` — compare two state snapshots
   - `derive` — force re-derive state from events
 - ✅ **MCP server** with tools:
-  - `get_current_task`, `get_task_state`, `append_event`, `list_open_questions`, `get_next_action`, `verify_artifacts`, `export_handoff`
+  - `get_current_task`, `get_task_state`, `append_event`, `list_open_questions`, `get_next_action`, `verify_artifacts`, `export_handoff`, `import_handoff`, `import_command`, `import_session`
 - ✅ **Adapter layer** with:
-  - Codex session importer (structured notes)
-  - Claude Code session importer (structured notes)
+  - Session importers for Codex, Claude Code, Cursor, and Gemini CLI
+  - Command output importer for test/build failures
   - Prompt exporters for Codex, Claude Code, Cursor, Gemini CLI, and generic markdown
 - ✅ **Landing site** (latchet.vercel.app)
   - Clear product positioning
@@ -56,7 +57,7 @@
 - ❌ Web UI or dashboard
 - ❌ Vector DB or semantic search
 - ❌ Automated event capture from terminal output (only manual session import)
-- ❌ Cursor or Gemini CLI importers (exporters only)
+
 - ❌ CI/CD pipeline integrations
 - ❌ Team or multi-user workflows
 

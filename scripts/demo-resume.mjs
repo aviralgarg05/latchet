@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -82,11 +82,19 @@ section("5. Verify failure is still the next constraint");
 const next = run(["next", "--task", "tenant-auth"], demoDir);
 process.stdout.write(`Next action: ${next}\n`);
 
-section("6. Export handoff for Codex (switch agent)");
+section("6. Import command output (optional — test failures)");
+const testOutputPath = resolve(demoDir, "test-output.txt");
+writeFileSync(testOutputPath, "FAIL auth.test.ts: fixture users missing organization_id", "utf8");
+const imported = JSON.parse(
+  run(["import-command", testOutputPath, "--command", "npm test", "--task", "tenant-auth"], demoDir)
+);
+process.stdout.write(`Imported ${imported.imported_events} events from command output\n`);
+
+section("7. Export handoff for Codex (switch agent)");
 const handoff = run(["export", "--task", "tenant-auth", "--format", "adapter", "--adapter", "codex"], demoDir);
 process.stdout.write(`${handoff}\n`);
 
-section("7. Ledger files on disk");
+section("8. Ledger files on disk");
 const statePath = resolve(demoDir, ".taskledger/tasks/tenant-auth/state.md");
 process.stdout.write(`${readFileSync(statePath, "utf8")}\n`);
 

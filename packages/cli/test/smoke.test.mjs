@@ -37,6 +37,29 @@ test("cli can initialize a project, create a task, log durable facts, and surfac
   }
 });
 
+test("cli can import command output and record failures", () => {
+  const dir = mkdtempSync(resolve(tmpdir(), "latchet-cli-command-"));
+  const outputPath = resolve(dir, "test-output.txt");
+
+  try {
+    writeFileSync(outputPath, "Test run failed with exception: fixture users missing organization_id", "utf8");
+
+    run(["init", "--name", "Smoke Test"], dir);
+    run(["task", "create", "ci", "--title", "Fix CI", "--goal", "Stop repeated test failures"], dir);
+
+    const imported = JSON.parse(
+      run(["import-command", outputPath, "--command", "npm test", "--task", "ci"], dir)
+    );
+    const state = JSON.parse(run(["show", "--task", "ci", "--json"], dir));
+
+    assert.equal(imported.imported_events, 2);
+    assert.equal(state.counts.open_failures, 1);
+    assert.match(state.recent_failures[0]?.payload.summary ?? "", /reported a failure/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("cli can import a structured codex session into ledger events", () => {
   const dir = mkdtempSync(resolve(tmpdir(), "latchet-cli-import-"));
   const sessionPath = resolve(dir, "codex-session.txt");

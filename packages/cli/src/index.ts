@@ -23,7 +23,7 @@ import {
   createTask
 } from "@latchet/core";
 import { readImportFile } from "@latchet/core";
-import { getAdapter } from "@latchet/adapters";
+import { getAdapter, importCommandOutput } from "@latchet/adapters";
 import type { AppendEventInput } from "@latchet/core";
 import type { EventPayload, LedgerEvent, VerificationStatus } from "@latchet/spec";
 
@@ -349,6 +349,27 @@ program
 
     const handoff = exportTask(process.cwd(), taskId, Boolean(options.history), redaction);
     writeMaybe(options.output, JSON.stringify(handoff, null, 2));
+  });
+
+program
+  .command("import-command")
+  .argument("<output>", "Command output file")
+  .requiredOption("--command <command>", "Command that produced the output")
+  .option("--task <id>", "Target task id")
+  .action((outputPath: string, options: { command: string; task?: string }) => {
+    const taskId = options.task ?? getCurrentTaskId(process.cwd());
+    const content = readFileSync(resolve(outputPath), "utf8");
+    const events = importCommandOutput(taskId, options.command, content);
+    const state = importTaskData(process.cwd(), taskId, events);
+
+    output(
+      {
+        task_id: taskId,
+        imported_events: events.length,
+        state
+      },
+      true
+    );
   });
 
 program

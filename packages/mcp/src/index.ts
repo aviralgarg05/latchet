@@ -12,7 +12,7 @@ import {
   verifyTaskFreshness
 } from "@latchet/core";
 import { readImportFile } from "@latchet/core";
-import { getAdapter } from "@latchet/adapters";
+import { getAdapter, importCommandOutput } from "@latchet/adapters";
 import type { EventPayload, LedgerEvent } from "@latchet/spec";
 
 function textResult(value: unknown) {
@@ -197,6 +197,30 @@ server.registerTool(
     const data = readImportFile(path);
     const state = importTaskData(process.cwd(), taskId, data);
     return textResult(state);
+  }
+);
+
+server.registerTool(
+  "import_command",
+  {
+    description: "Import command output into ledger events (evidence plus optional failure).",
+    inputSchema: {
+      taskId: z.string().optional(),
+      command: z.string(),
+      path: z.string()
+    }
+  },
+  async ({ taskId, command, path }) => {
+    const resolvedTaskId = taskId ?? getCurrentTaskId(process.cwd());
+    const content = readFileSync(path, "utf8");
+    const events = importCommandOutput(resolvedTaskId, command, content);
+    const state = importTaskData(process.cwd(), resolvedTaskId, events);
+
+    return textResult({
+      task_id: resolvedTaskId,
+      imported_events: events.length,
+      state
+    });
   }
 );
 

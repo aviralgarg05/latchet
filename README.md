@@ -11,16 +11,16 @@ The ledger is append-only. Handoff is a derived feature, not the primary artifac
 ✅ Local-first task ledger (`.taskledger/` directory)  
 ✅ CLI: create tasks, log decisions/failures/quirks, derive state, verify freshness, export handoffs  
 ✅ MCP server for coding-agent integrations  
-✅ Codex and Claude Code session importers  
+✅ Session importers for Codex, Claude Code, Cursor, and Gemini CLI  
+✅ Command output importer (`import-command`) for test/build failures  
 ✅ Prompt exporters for Codex, Claude Code, Cursor, and Gemini CLI  
-✅ 14+ tests covering core behavior  
+✅ 18+ tests covering core behavior  
 
 ### What's NOT (Yet)
 
 ❌ Live vendor integrations or auto-capture  
 ❌ Hosted sync or cloud backend  
-❌ Web UI or dashboard  
-❌ Cursor and Gemini CLI importers  
+❌ Web UI or dashboard
 
 See [RELEASE_SCOPE.md](RELEASE_SCOPE.md) for full details on what ships, what doesn't, and launch readiness.
 
@@ -59,6 +59,8 @@ node packages/cli/dist/index.js log decision --task rbac --summary "Use PostgreS
 node packages/cli/dist/index.js log failure --task rbac --summary "Fixture users missing organization_id" --error "Expected tenant claim in JWT fixtures"
 node packages/cli/dist/index.js log next_action --task rbac --summary "Patch test fixtures and rerun integration suite" --priority high
 node packages/cli/dist/index.js import-session notes/codex-session.txt --adapter codex --task rbac
+npm test 2>&1 | tee /tmp/test-output.txt
+node packages/cli/dist/index.js import-command /tmp/test-output.txt --command "npm test" --task rbac
 node packages/cli/dist/index.js derive --task rbac
 node packages/cli/dist/index.js show --task rbac
 ```
@@ -83,6 +85,8 @@ The MCP server exposes:
 - `verify_artifacts`
 - `export_handoff`
 - `import_handoff`
+- `import_command`
+- `import_session`
 
 Run it with:
 
