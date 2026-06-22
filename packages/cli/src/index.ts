@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Command, InvalidArgumentError } from "commander";
 import {
@@ -349,6 +349,32 @@ program
 
     const handoff = exportTask(process.cwd(), taskId, Boolean(options.history), redaction);
     writeMaybe(options.output, JSON.stringify(handoff, null, 2));
+  });
+
+program
+  .command("import-session")
+  .argument("<input>", "Structured session summary file")
+  .requiredOption("--adapter <adapter>", "Adapter id")
+  .option("--task <id>", "Target task id")
+  .action((input: string, options: { adapter: string; task?: string }) => {
+    const adapter = getAdapter(options.adapter);
+    if (!adapter?.importSession) {
+      throw new InvalidArgumentError(`Adapter does not support session import: ${options.adapter}`);
+    }
+
+    const taskId = options.task ?? getCurrentTaskId(process.cwd());
+    const content = readFileSync(resolve(input), "utf8");
+    const events = adapter.importSession(taskId, content);
+    const state = importTaskData(process.cwd(), taskId, events);
+
+    output(
+      {
+        task_id: taskId,
+        imported_events: events.length,
+        state
+      },
+      true
+    );
   });
 
 program

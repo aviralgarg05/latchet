@@ -1,0 +1,6 @@
+Decision: Keep the migration backward-compatible for existing org slugs
+Constraint: Do not rename public API fields in this release
+Failure: Import script crashes on duplicate slug rows
+Env quirk: Staging data includes duplicate org slugs from 2024 backfills
+Open question: Should duplicate slugs be merged or rejected during import?
+Next action: Add duplicate-slug preflight and rerun the staging import

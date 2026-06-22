@@ -1,5 +1,6 @@
 import type { TaskState } from "@latchet/spec";
 import type { AgentAdapter } from "./contracts.js";
+import { importStructuredSession } from "./session-import.js";
 
 function commonStateBlock(state: TaskState): string {
   const lines = [
@@ -41,25 +42,29 @@ export const adapters: AgentAdapter[] = [
     id: "codex",
     label: "Codex",
     description: "Compact handoff prompt for Codex CLI/Desktop workflows.",
-    exportPrompt: (state) => buildPrompt("Codex", state)
+    exportPrompt: (state) => buildPrompt("Codex", state),
+    importSession: (taskId, content) => importStructuredSession(taskId, "codex", content)
   },
   {
     id: "claude-code",
     label: "Claude Code",
     description: "Compact handoff prompt for Claude Code sessions.",
-    exportPrompt: (state) => buildPrompt("Claude Code", state)
+    exportPrompt: (state) => buildPrompt("Claude Code", state),
+    importSession: (taskId, content) => importStructuredSession(taskId, "claude-code", content)
   },
   {
     id: "gemini-cli",
     label: "Gemini CLI",
     description: "Compact handoff prompt for Gemini CLI sessions.",
-    exportPrompt: (state) => buildPrompt("Gemini CLI", state)
+    exportPrompt: (state) => buildPrompt("Gemini CLI", state),
+    importSession: (taskId, content) => importStructuredSession(taskId, "gemini-cli", content)
   },
   {
     id: "cursor",
     label: "Cursor",
     description: "Compact handoff prompt for Cursor agent chats and rules.",
-    exportPrompt: (state) => buildPrompt("Cursor", state)
+    exportPrompt: (state) => buildPrompt("Cursor", state),
+    importSession: (taskId, content) => importStructuredSession(taskId, "cursor", content)
   },
   {
     id: "generic-markdown",

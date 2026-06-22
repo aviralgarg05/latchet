@@ -8,7 +8,7 @@ export function FeatureGrid() {
     <section className="section feature-strip" id="features">
       <div className="section-heading reveal reveal--one">
         <p className="section-kicker">The parts that should survive context windows.</p>
-        <h2>Not memory theater. Durable task primitives.</h2>
+        <h2>Not AI memory theater. Durable task primitives.</h2>
       </div>
 
       <div className="feature-strip__rail">

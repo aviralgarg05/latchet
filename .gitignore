@@ -6,3 +6,5 @@ output
 .taskledger
 .vercel
 .env*
+.DS_Store
+.qodo/

@@ -1,0 +1,29 @@
+{
+  "task": {
+    "id": "debug-ci",
+    "title": "Debug tenant RBAC suite",
+    "goal": "Stop the failing tenant auth tests",
+    "status": "in_progress"
+  },
+  "counts": {
+    "active_decisions": 1,
+    "open_failures": 1,
+    "env_quirks": 1,
+    "open_questions": 0
+  },
+  "active_constraints": [],
+  "active_decisions": [
+    "Keep API response shape stable during the fix"
+  ],
+  "recent_failures": [
+    "Fixture users are missing organization_id"
+  ],
+  "active_env_quirks": [
+    "Tests only pass when FEATURE_TENANT_RBAC=1 is set locally"
+  ],
+  "open_questions": [],
+  "next_action": "Update auth fixtures with organization_id and rerun tenant tests",
+  "artifact_refs": [
+    "tests/integration/auth-fixtures.ts"
+  ]
+}

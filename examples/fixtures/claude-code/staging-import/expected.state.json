@@ -1,0 +1,31 @@
+{
+  "task": {
+    "id": "staging-import",
+    "title": "Stabilize org import",
+    "goal": "Finish the staging org import safely",
+    "status": "in_progress"
+  },
+  "counts": {
+    "active_decisions": 1,
+    "open_failures": 1,
+    "env_quirks": 1,
+    "open_questions": 1
+  },
+  "active_constraints": [
+    "Do not rename public API fields in this release"
+  ],
+  "active_decisions": [
+    "Keep the migration backward-compatible for existing org slugs"
+  ],
+  "recent_failures": [
+    "Import script crashes on duplicate slug rows"
+  ],
+  "active_env_quirks": [
+    "Staging data includes duplicate org slugs from 2024 backfills"
+  ],
+  "open_questions": [
+    "Should duplicate slugs be merged or rejected during import?"
+  ],
+  "next_action": "Add duplicate-slug preflight and rerun the staging import",
+  "artifact_refs": []
+}

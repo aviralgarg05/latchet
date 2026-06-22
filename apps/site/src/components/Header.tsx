@@ -17,10 +17,13 @@ export function Header() {
         <a href="#open-source">Open Source</a>
       </nav>
 
-      <a className="button button--ghost button--compact" href="https://github.com/aviralgarg05/latchet" target="_blank" rel="noreferrer">
-        GitHub
-        <ArrowUpRightIcon width={14} height={14} />
-      </a>
+      <div className="site-header__actions">
+        <span className="site-header__meta">Built by Aviral Garg</span>
+        <a className="button button--ghost button--compact" href="https://github.com/aviralgarg05/latchet" target="_blank" rel="noreferrer">
+          GitHub
+          <ArrowUpRightIcon width={14} height={14} />
+        </a>
+      </div>
     </header>
   );
 }

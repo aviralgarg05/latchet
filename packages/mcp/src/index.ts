@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import * as z from "zod/v4";
@@ -196,6 +197,35 @@ server.registerTool(
     const data = readImportFile(path);
     const state = importTaskData(process.cwd(), taskId, data);
     return textResult(state);
+  }
+);
+
+server.registerTool(
+  "import_session",
+  {
+    description: "Import a structured session summary file into canonical ledger events.",
+    inputSchema: {
+      taskId: z.string().optional(),
+      adapter: z.string(),
+      path: z.string()
+    }
+  },
+  async ({ taskId, adapter, path }) => {
+    const resolvedAdapter = getAdapter(adapter);
+    if (!resolvedAdapter?.importSession) {
+      throw new Error(`Adapter does not support session import: ${adapter}`);
+    }
+
+    const resolvedTaskId = taskId ?? getCurrentTaskId(process.cwd());
+    const content = readFileSync(path, "utf8");
+    const events = resolvedAdapter.importSession(resolvedTaskId, content);
+    const state = importTaskData(process.cwd(), resolvedTaskId, events);
+
+    return textResult({
+      task_id: resolvedTaskId,
+      imported_events: events.length,
+      state
+    });
   }
 );
 

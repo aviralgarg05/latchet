@@ -1,0 +1,43 @@
+[
+  {
+    "type": "decision",
+    "payload": {
+      "summary": "Keep API response shape stable during the fix",
+      "status": "accepted"
+    }
+  },
+  {
+    "type": "attempt",
+    "payload": {
+      "summary": "Reran integration suite against the new auth middleware",
+      "result": "failure"
+    }
+  },
+  {
+    "type": "failure",
+    "payload": {
+      "summary": "Fixture users are missing organization_id",
+      "status": "open"
+    }
+  },
+  {
+    "type": "env_quirk",
+    "payload": {
+      "summary": "Tests only pass when FEATURE_TENANT_RBAC=1 is set locally"
+    }
+  },
+  {
+    "type": "artifact_ref",
+    "payload": {
+      "path": "tests/integration/auth-fixtures.ts",
+      "revision": "git:abc123"
+    }
+  },
+  {
+    "type": "next_action",
+    "payload": {
+      "summary": "Update auth fixtures with organization_id and rerun tenant tests",
+      "priority": "medium"
+    }
+  }
+]

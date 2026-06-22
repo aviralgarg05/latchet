@@ -11,7 +11,8 @@
   "scripts": {
     "build": "tsc -b && node scripts/run-site.mjs build",
     "clean": "find packages apps -type d \\( -name dist -o -name .tsbuildinfo \\) -prune -exec rm -rf {} + 2>/dev/null || true",
-    "test": "npm run build && node --test packages/core/dist/test/*.test.js",
+    "test": "npm run build && node --test packages/core/dist/test/*.test.js packages/adapters/test/*.test.mjs packages/cli/test/*.test.mjs packages/mcp/test/*.test.mjs",
+    "demo": "npm run build && node scripts/demo-resume.mjs",
     "cli": "node packages/cli/dist/index.js",
     "mcp": "node packages/mcp/dist/index.js",
     "dev:site": "node scripts/run-site.mjs dev",

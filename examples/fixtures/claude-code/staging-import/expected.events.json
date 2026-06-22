@@ -1,0 +1,41 @@
+[
+  {
+    "type": "decision",
+    "payload": {
+      "summary": "Keep the migration backward-compatible for existing org slugs",
+      "status": "accepted"
+    }
+  },
+  {
+    "type": "constraint",
+    "payload": {
+      "summary": "Do not rename public API fields in this release"
+    }
+  },
+  {
+    "type": "failure",
+    "payload": {
+      "summary": "Import script crashes on duplicate slug rows",
+      "status": "open"
+    }
+  },
+  {
+    "type": "env_quirk",
+    "payload": {
+      "summary": "Staging data includes duplicate org slugs from 2024 backfills"
+    }
+  },
+  {
+    "type": "open_question",
+    "payload": {
+      "question": "Should duplicate slugs be merged or rejected during import?"
+    }
+  },
+  {
+    "type": "next_action",
+    "payload": {
+      "summary": "Add duplicate-slug preflight and rerun the staging import",
+      "priority": "medium"
+    }
+  }
+]

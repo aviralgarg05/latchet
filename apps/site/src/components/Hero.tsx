@@ -17,13 +17,20 @@ export function Hero() {
   return (
     <section className="hero section section--top" id="top">
       <div className="hero__copy reveal reveal--one">
+        <div className="hero__meta">
+          <span className="hero__eyebrow">Local-first task ledger for AI coding agents</span>
+          <span className="hero__founder">
+            <span className="hero__founder-mark">AG</span>
+            Built by Aviral Garg
+          </span>
+        </div>
         <h1>
-          Stop every model from
+          Give every model
           <br />
-          relearning the same mess.
+          the same task state.
         </h1>
         <p className="hero__lede">
-          Latchet keeps decisions, failed attempts, environment quirks, and the next action in one local ledger so each coding agent starts from real task state instead of chat residue.
+          Latchet keeps decisions, failed attempts, environment quirks, and the next action in one local ledger so Codex, Claude Code, Cursor, and the next session all start from durable state instead of chat residue.
         </p>
         <div className="hero__actions">
           <a className="button button--primary" href="#workflow">
@@ -36,9 +43,9 @@ export function Hero() {
         </div>
 
         <div className="hero__terminal">
-          <span className="hero__prompt">$ latchet init</span>
+          <span className="hero__prompt">$ latchet import-session notes/codex-session.txt --adapter codex</span>
           <span className="hero__caption">
-            Create a durable source of truth in <code>.taskledger/</code>.
+            Append structured state into <code>.taskledger/</code>, then resume without relitigating the same dead end.
           </span>
         </div>
       </div>
@@ -113,7 +120,7 @@ export function Hero() {
                 <FreshnessIcon width={18} height={18} />
                 <div>
                   <strong>Freshness</strong>
-                  <p>branch main · commit 89f2e77 · 2 warnings flagged</p>
+                  <p>branch main · commit 89f2e77 · 2 checks flagged</p>
                 </div>
               </div>
             </div>

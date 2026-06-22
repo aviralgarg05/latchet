@@ -15,6 +15,7 @@
 - Hook-based auto-append flows
 - Session/log importers
 - OpenTelemetry evidence ingestion
+- Detailed execution plan in [Phase 2 Execution](phase-2-execution.md)
 
 ## Phase 3
 

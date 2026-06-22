@@ -4,8 +4,8 @@ export function StorySection() {
   return (
     <section className="section story" id="why">
       <div className="story__intro reveal reveal--one">
-        <p className="section-kicker">AI work breaks between sessions, not inside them.</p>
-        <h2>The hard part is not memory. It is continuity you can actually trust.</h2>
+        <p className="section-kicker">AI work usually breaks between sessions, not inside them.</p>
+        <h2>Latchet is for the parts of the job that should stop evaporating.</h2>
       </div>
 
       <div className="story__rows">

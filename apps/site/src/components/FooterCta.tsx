@@ -10,8 +10,8 @@ export function FooterCta() {
           <span>Latchet</span>
         </div>
         <div className="footer-cta__copy">
-          <h2>Make the next session start where the last one ended.</h2>
-          <p>Open source, local-first, and built for the parts of AI-assisted work that should not evaporate when you change tools.</p>
+          <h2>Make the next session start where the last one actually ended.</h2>
+          <p>Open source, local-first, and built by Aviral Garg for the parts of AI-assisted work that should not evaporate when you change tools.</p>
         </div>
         <div className="footer-cta__actions">
           <a className="button button--primary button--light" href="https://github.com/aviralgarg05/latchet" target="_blank" rel="noreferrer">
@@ -26,7 +26,7 @@ export function FooterCta() {
 
       <footer className="site-footer">
         <p>Latchet</p>
-        <p>Structured task state for AI-assisted work.</p>
+        <p>Built by Aviral Garg. Structured task state for AI-assisted work.</p>
       </footer>
     </section>
   );

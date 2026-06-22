@@ -8,7 +8,7 @@ export function ToolingSection() {
         <p className="section-kicker">Built for actual coding-agent workflows.</p>
         <h2>CLI-first, MCP-native, and local by default.</h2>
         <p>
-          Capture durable facts manually, append from tooling, export compact handoffs, and expose the same state to coding agents over MCP without inventing another hosted memory silo.
+          Capture durable facts manually, append them from tooling, export compact handoffs, and expose the same state to coding agents over MCP without inventing another hosted memory silo.
         </p>
       </div>
 

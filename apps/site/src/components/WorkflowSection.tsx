@@ -5,7 +5,7 @@ export function WorkflowSection() {
     <section className="section workflow" id="workflow">
       <div className="section-heading reveal reveal--one">
         <p className="section-kicker">One ledger, many assistants.</p>
-        <h2>Let the tools change. Keep the task state intact.</h2>
+        <h2>Let the tools change. Keep the task intact.</h2>
       </div>
 
       <div className="workflow-belt reveal reveal--two">

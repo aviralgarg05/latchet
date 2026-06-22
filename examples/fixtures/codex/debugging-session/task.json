@@ -1,0 +1,8 @@
+{
+  "id": "debug-ci",
+  "title": "Debug tenant RBAC suite",
+  "goal": "Stop the failing tenant auth tests",
+  "status": "in_progress",
+  "created_at": "2026-06-17T09:00:00.000Z",
+  "updated_at": "2026-06-17T09:00:00.000Z"
+}

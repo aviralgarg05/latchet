@@ -1,10 +1,30 @@
 # Latchet
 
-Latchet is a local-first operational ledger for AI-assisted work. It keeps the durable parts of a task in one place: decisions, failed attempts, env quirks, artifact refs, open questions, and the next action.
+**Latchet keeps decisions, failed attempts, env quirks, and the next action in one place for AI coding agents.**
+
+Stop re-explaining the same task across Codex, Claude Code, Cursor, and similar tools. Latchet stores durable work state in repo-local files so the next session (or the next tool) doesn't repeat the same dead end.
 
 The ledger is append-only. Handoff is a derived feature, not the primary artifact.
 
-## What ships in this repo
+### What's Included in v0.1
+
+✅ Local-first task ledger (`.taskledger/` directory)  
+✅ CLI: create tasks, log decisions/failures/quirks, derive state, verify freshness, export handoffs  
+✅ MCP server for coding-agent integrations  
+✅ Codex and Claude Code session importers  
+✅ Prompt exporters for Codex, Claude Code, Cursor, and Gemini CLI  
+✅ 14+ tests covering core behavior  
+
+### What's NOT (Yet)
+
+❌ Live vendor integrations or auto-capture  
+❌ Hosted sync or cloud backend  
+❌ Web UI or dashboard  
+❌ Cursor and Gemini CLI importers  
+
+See [RELEASE_SCOPE.md](RELEASE_SCOPE.md) for full details on what ships, what doesn't, and launch readiness.
+
+## Shipped in this repo
 
 - Canonical event schema in [packages/spec](packages/spec)
 - Projection engine, local store, markdown renderer, freshness checks, redaction, import/export, and diffing in [packages/core](packages/core)
@@ -38,6 +58,7 @@ node packages/cli/dist/index.js task create rbac --title "RBAC migration" --goal
 node packages/cli/dist/index.js log decision --task rbac --summary "Use PostgreSQL RLS" --reason "Enforce tenant isolation outside the API"
 node packages/cli/dist/index.js log failure --task rbac --summary "Fixture users missing organization_id" --error "Expected tenant claim in JWT fixtures"
 node packages/cli/dist/index.js log next_action --task rbac --summary "Patch test fixtures and rerun integration suite" --priority high
+node packages/cli/dist/index.js import-session notes/codex-session.txt --adapter codex --task rbac
 node packages/cli/dist/index.js derive --task rbac
 node packages/cli/dist/index.js show --task rbac
 ```
@@ -80,5 +101,10 @@ node packages/mcp/dist/index.js
 
 ## Docs
 
+- [Release Scope & Launch Checklist](RELEASE_SCOPE.md) — what ships, what's out of scope, success criteria
 - [Roadmap](docs/roadmap.md)
 - [Marketing Strategy](docs/marketing-strategy.md)
+- [Phase 2 Execution](docs/phase-2-execution.md)
+- [Go-To-Market Playbook](docs/go-to-market-playbook.md)
+- [Product Operating Checklist](docs/product-operating-checklist.md)
+- [Detailed Product Architecture](docs/detailed-product-architecture.md)

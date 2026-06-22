@@ -20,6 +20,7 @@ Core promise:
 2. Publish before/after demos around restart speed and repeated-failure reduction.
 3. Seed integration templates for Codex, Claude Code, Gemini CLI, and Cursor.
 4. Launch on GitHub, Hacker News, X, and relevant Reddit communities.
+5. Use the detailed launch checklist in [Go-To-Market Playbook](go-to-market-playbook.md).
 
 ## Content pillars
 

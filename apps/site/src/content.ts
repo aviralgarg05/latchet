@@ -2,55 +2,55 @@ export const heroEvents = [
   {
     id: "decision",
     label: "Decision",
-    title: "Lock tenant isolation to PostgreSQL RLS",
-    summary: "Architecture calls stay visible, accepted, and inspectable instead of evaporating into whichever model said them first.",
+    title: "PostgreSQL RLS stays locked in",
+    summary: "Accepted architecture calls stay visible instead of vanishing into whichever model happened to say them first.",
     detail: "accepted · supersedes API-only guardrails",
     command: "latchet log decision --summary \"Use PostgreSQL RLS\"",
-    accent: "green"
+    accent: "cyan"
   },
   {
     id: "failure",
     label: "Failure",
     title: "Fixture users missing organization_id",
-    summary: "Dead ends stay in the task state so the next session doesn't spend another hour rediscovering the same breakage.",
+    summary: "Known-bad paths survive the session so the next model does not burn another hour rediscovering the same breakage.",
     detail: "reproducible · integration tests blocked",
     command: "latchet log failure --summary \"Fixture users missing organization_id\"",
-    accent: "rust"
+    accent: "amber"
   },
   {
     id: "quirk",
     label: "Env quirk",
     title: "FEATURE_TENANT_RBAC=1 is required locally",
-    summary: "Local setup weirdness gets recorded next to the task instead of surviving only in one person's shell history.",
+    summary: "Machine-specific weirdness gets recorded next to the task instead of living only in one shell history.",
     detail: "machine-specific · verified yesterday",
     command: "latchet log env_quirk --summary \"Enable FEATURE_TENANT_RBAC=1\"",
-    accent: "gold"
+    accent: "slate"
   },
   {
     id: "action",
     label: "Next action",
     title: "Patch auth fixtures, rerun tenant tests, verify freshness",
-    summary: "Every session can end with one sharp next move instead of a vague handoff paragraph or a blank restart tomorrow.",
+    summary: "Every session can end with one sharp next move instead of a vague handoff paragraph and a cold restart tomorrow.",
     detail: "single-valued · resume-safe",
     command: "latchet log next_action --summary \"Patch fixtures and rerun tenant tests\"",
-    accent: "ink"
+    accent: "cyan"
   }
 ];
 
 export const painPoints = [
   {
     index: "01",
-    title: "Chat residue is not task state",
-    description: "Good decisions get stranded in transcripts, then a fresh model confidently walks back into the same argument."
+    title: "Transcript residue is not task state",
+    description: "Good decisions get stranded in long chats, then a fresh model confidently walks back into the same argument."
   },
   {
     index: "02",
-    title: "Failed attempts keep getting promoted to new work",
+    title: "Failed attempts keep coming back",
     description: "A dead branch, flaky fixture, or rejected approach returns because nothing durable recorded why it died."
   },
   {
     index: "03",
-    title: "The one useful local quirk never survives the handoff",
+    title: "The one useful local quirk never survives",
     description: "The branch mismatch, feature flag, or missing file that mattered most disappears right before the next session starts."
   }
 ];
@@ -68,7 +68,7 @@ export const featureCards = [
   },
   {
     title: "Env quirks",
-    description: "Record the weird shell flags, fixture landmines, and machine-specific rules code alone won't explain.",
+    description: "Record shell flags, fixture landmines, and machine-specific rules code alone will not explain.",
     meta: "local reality"
   },
   {
@@ -94,6 +94,7 @@ export const toolingCommands = [
   "$ latchet log failure --summary \"Fixture users missing organization_id\"",
   "$ latchet log decision --summary \"Use PostgreSQL RLS\"",
   "$ latchet log next_action --summary \"Patch fixtures and rerun tests\"",
+  "$ latchet import-session notes/codex-session.txt --adapter codex",
   "$ latchet export --format adapter --adapter codex"
 ];
 
@@ -107,10 +108,10 @@ export const mcpTools = [
 ];
 
 export const workflowSources = [
-  "ChatGPT",
   "Codex",
   "Claude Code",
-  "Cursor"
+  "Cursor",
+  "Gemini CLI"
 ];
 
 export const repoTree = [

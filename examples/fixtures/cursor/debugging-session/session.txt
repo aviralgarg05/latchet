@@ -1,0 +1,6 @@
+Decision: Keep API response shape stable during the fix
+Failed attempt: Reran integration suite against the new auth middleware
+Failure: Fixture users are missing organization_id
+Env quirk: Tests only pass when FEATURE_TENANT_RBAC=1 is set locally
+Artifact: tests/integration/auth-fixtures.ts | git:abc123
+Next action: Update auth fixtures with organization_id and rerun tenant tests
