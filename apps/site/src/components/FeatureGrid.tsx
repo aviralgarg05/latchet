@@ -1,34 +1,24 @@
 import { featureCards } from "../content";
-import { ActionIcon, FailureIcon, FreshnessIcon, PortableIcon, QuirkIcon, TrailIcon } from "./Icons";
-
-const icons = [TrailIcon, FailureIcon, QuirkIcon, ActionIcon, PortableIcon, FreshnessIcon];
 
 export function FeatureGrid() {
   return (
-    <section className="section feature-strip" id="features">
-      <div className="section-heading reveal reveal--one">
-        <p className="section-kicker">The parts that should survive context windows.</p>
-        <h2>Not AI memory theater. Durable task primitives.</h2>
+    <section className="section features" id="features">
+      <div className="section-intro">
+        <h2>What survives context windows.</h2>
+        <p>Six primitives. Append-only ledger. Derived state for resume.</p>
       </div>
 
-      <div className="feature-strip__rail">
-        {featureCards.map((feature, index) => {
-          const Icon = icons[index];
-
-          return (
-            <article className={`feature-band reveal reveal--${(index % 3) + 1}`} key={feature.title}>
-              <div className="feature-band__icon">
-                <Icon width={24} height={24} />
-              </div>
-              <div className="feature-band__copy">
-                <p>{feature.meta}</p>
-                <h3>{feature.title}</h3>
-                <span>{feature.description}</span>
-              </div>
-            </article>
-          );
-        })}
-      </div>
+      <dl className="spec-list">
+        {featureCards.map((feature) => (
+          <div className="spec-list__row" key={feature.title}>
+            <dt>
+              <span className="spec-list__title">{feature.title}</span>
+              <span className="spec-list__meta">{feature.meta}</span>
+            </dt>
+            <dd>{feature.description}</dd>
+          </div>
+        ))}
+      </dl>
     </section>
   );
 }

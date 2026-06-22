@@ -3,27 +3,22 @@ import { painPoints } from "../content";
 export function StorySection() {
   return (
     <section className="section story" id="why">
-      <div className="story__intro reveal reveal--one">
-        <p className="section-kicker">AI work usually breaks between sessions, not inside them.</p>
-        <h2>Latchet is for the parts of the job that should stop evaporating.</h2>
+      <div className="section-intro">
+        <h2>Work breaks between sessions, not inside them.</h2>
+        <p>Most coding-agent pain is not model quality. It is lost context — decisions that evaporate, failures that get retried, env quirks that vanish.</p>
       </div>
 
-      <div className="story__rows">
-        {painPoints.map((point, index) => (
-          <article className={`story-row reveal reveal--${(index % 3) + 1}`} key={point.title}>
-            <div className="story-row__index">{point.index}</div>
-            <div className="story-row__body">
+      <ol className="problem-list">
+        {painPoints.map((point) => (
+          <li className="problem-list__item" key={point.title}>
+            <span className="problem-list__index">{point.index}</span>
+            <div>
               <h3>{point.title}</h3>
               <p>{point.description}</p>
             </div>
-          </article>
+          </li>
         ))}
-      </div>
-
-      <p className="story__statement reveal reveal--three">
-        Latchet gives every agent the same source of truth,
-        <span> on your machine.</span>
-      </p>
+      </ol>
     </section>
   );
 }

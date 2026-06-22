@@ -10,12 +10,8 @@ import { WorkflowSection } from "./components/WorkflowSection";
 function App() {
   return (
     <div className="page-shell">
-      <div className="page-glow page-glow--left" />
-      <div className="page-glow page-glow--right" />
-      <div className="page-grid" />
-
+      <Header />
       <main className="page">
-        <Header />
         <Hero />
         <StorySection />
         <FeatureGrid />

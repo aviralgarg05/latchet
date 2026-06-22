@@ -98,13 +98,34 @@ export const toolingCommands = [
   "$ latchet export --format adapter --adapter codex"
 ];
 
+export const statePreview = `# Fix tenant auth tests
+
+Goal: Stop repeated fixture failures
+Status: in_progress
+
+## Active Decisions
+- Use PostgreSQL RLS for tenant isolation
+
+## Recent Failures
+- Fixture users missing organization_id
+
+## Environment Quirks
+- FEATURE_TENANT_RBAC=1 required locally
+
+## Next Action
+- Patch auth fixtures and rerun tenant integration tests`;
+
 export const mcpTools = [
   "get_current_task",
-  "append_event",
   "get_task_state",
+  "append_event",
+  "get_next_action",
   "list_open_questions",
   "verify_artifacts",
-  "export_handoff"
+  "export_handoff",
+  "import_handoff",
+  "import_command",
+  "import_session"
 ];
 
 export const workflowSources = [

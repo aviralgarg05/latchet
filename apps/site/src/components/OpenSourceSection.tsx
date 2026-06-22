@@ -2,44 +2,34 @@ import { repoTree } from "../content";
 
 export function OpenSourceSection() {
   return (
-    <section className="section open-source" id="open-source">
-      <div className="open-source__copy reveal reveal--one">
-        <p className="section-kicker">Local-first by design.</p>
-        <h2>Plain files, inspectable state, and no required control plane.</h2>
-
-        <div className="open-source__claims">
-          <div>
-            <strong>Human-editable JSONL ledger</strong>
-            <p>Every durable fact stays readable, append-only, and manual-edit friendly.</p>
-          </div>
-          <div>
-            <strong>Derived Markdown state</strong>
-            <p>Resume from current state instead of trawling transcript junk or stale notes.</p>
-          </div>
-          <div>
-            <strong>Freshness and provenance</strong>
-            <p>Branch, commit, artifacts, and verification status stay attached to the task.</p>
-          </div>
-        </div>
-      </div>
-
-      <article className="repo-panel reveal reveal--two" aria-label="Repository structure">
-        <div className="repo-panel__head">
-          <p>repo / latchet</p>
-          <a href="https://github.com/aviralgarg05/latchet" target="_blank" rel="noreferrer">
-            open →
+    <section className="section opensource" id="open-source">
+      <div className="opensource-grid">
+        <div className="section-intro section-intro--flush">
+          <h2>Open source. Local by default.</h2>
+          <p>Plain files you can inspect, edit, and version-control. No hosted memory silo required.</p>
+          <ul className="bullet-list">
+            <li>Human-readable JSONL event log</li>
+            <li>Derived Markdown state for resume</li>
+            <li>Git branch, commit, and artifact freshness checks</li>
+          </ul>
+          <a className="text-link" href="https://github.com/aviralgarg05/latchet" target="_blank" rel="noreferrer">
+            github.com/aviralgarg05/latchet →
           </a>
         </div>
 
-        <div className="repo-panel__tree">
-          {repoTree.map((item) => (
-            <div className="repo-panel__row" key={item}>
-              <span className="repo-panel__bullet" />
-              <code>{item}</code>
-            </div>
-          ))}
+        <div className="code-panel">
+          <div className="code-panel__head">
+            <span>repository</span>
+          </div>
+          <ul className="tree-list">
+            {repoTree.map((item) => (
+              <li key={item}>
+                <code>{item}</code>
+              </li>
+            ))}
+          </ul>
         </div>
-      </article>
+      </div>
     </section>
   );
 }
