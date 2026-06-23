@@ -1,4 +1,5 @@
 import type {
+  AttemptPayload,
   ArtifactRefPayload,
   ConstraintPayload,
   DecisionPayload,
@@ -79,6 +80,7 @@ export function deriveTaskState(
       const status = event.payload.status ?? "accepted";
       return status === "accepted" || status === "proposed";
     });
+  const recentAttempts = filterActive<AttemptPayload>(ordered, "attempt", superseded).slice(-10).reverse();
   const recentFailures = filterActive<FailurePayload>(ordered, "failure", superseded).slice(-10).reverse();
   const activeEnvQuirks = filterActive<EnvQuirkPayload>(ordered, "env_quirk", superseded);
   const openQuestions = filterActive<OpenQuestionPayload>(ordered, "open_question", superseded);
@@ -114,6 +116,7 @@ export function deriveTaskState(
     },
     active_constraints: activeConstraints,
     active_decisions: activeDecisions,
+    recent_attempts: recentAttempts,
     recent_failures: recentFailures,
     active_env_quirks: activeEnvQuirks,
     open_questions: openQuestions,

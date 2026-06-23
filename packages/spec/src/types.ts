@@ -197,6 +197,7 @@ export interface TaskState {
   };
   active_constraints: LedgerEvent<ConstraintPayload>[];
   active_decisions: LedgerEvent<DecisionPayload>[];
+  recent_attempts: LedgerEvent<AttemptPayload>[];
   recent_failures: LedgerEvent<FailurePayload>[];
   active_env_quirks: LedgerEvent<EnvQuirkPayload>[];
   open_questions: LedgerEvent<OpenQuestionPayload>[];

@@ -199,3 +199,74 @@ test("redaction strips paths and obvious secrets", () => {
     assert.ok(redacted.notes[0]?.payload.summary.includes("[REDACTED_TOKEN]"));
   });
 });
+
+test("duplicate import / dedupe correctly drops identical events", () => {
+  withTempDir((dir) => {
+    createTask(dir, {
+      id: "dedupe-task",
+      title: "Dedupe test",
+      goal: "Check deduplication"
+    });
+
+    const events = [
+      {
+        id: "event_1",
+        task_id: "dedupe-task",
+        type: "decision" as const,
+        payload: { summary: "Pick React", status: "accepted" as const },
+        timestamp: "2026-01-01T00:00:00Z",
+        actor: { kind: "assistant" as const, name: "bot" },
+        source: { kind: "session" as const, provider: "test" },
+        verification: { status: "model_inferred" as const }
+      },
+      {
+        id: "event_2",
+        task_id: "dedupe-task",
+        type: "failure" as const,
+        payload: { summary: "Failed to build", status: "open" as const },
+        timestamp: "2026-01-01T00:01:00Z",
+        actor: { kind: "assistant" as const, name: "bot" },
+        source: { kind: "session" as const, provider: "test" },
+        verification: { status: "model_inferred" as const }
+      }
+    ];
+
+    // Import first time
+    importTaskData(dir, "dedupe-task", events);
+    const afterFirst = readTaskEvents(dir, "dedupe-task");
+    assert.equal(afterFirst.length, 2);
+
+    // Import EXACT SAME events again
+    importTaskData(dir, "dedupe-task", events);
+    const afterSecond = readTaskEvents(dir, "dedupe-task");
+    
+    // Length should still be 2, no duplicates created
+    assert.equal(afterSecond.length, 2);
+    
+    // Now import an event with a different ID but IDENTICAL payload
+    const duplicatePayloadEvent = {
+      ...events[0],
+      id: "event_3"
+    };
+    
+    importTaskData(dir, "dedupe-task", [duplicatePayloadEvent]);
+    const afterThird = readTaskEvents(dir, "dedupe-task");
+    
+    // Length should STILL be 2, because payload matches event_1
+    assert.equal(afterThird.length, 2);
+    
+    // Import an event with same type but different payload
+    const differentPayloadEvent = {
+      ...events[0],
+      id: "event_4",
+      payload: { summary: "Pick Vue", status: "accepted" as const }
+    };
+    
+    importTaskData(dir, "dedupe-task", [differentPayloadEvent]);
+    const afterFourth = readTaskEvents(dir, "dedupe-task");
+    
+    // Length should be 3, because it's genuinely new
+    assert.equal(afterFourth.length, 3);
+  });
+});
+

@@ -346,13 +346,30 @@ export function importTaskData(workspaceRoot: string, taskId: string, data: unkn
     throw new LedgerError("Unsupported import format.");
   }
 
-  const existingIds = new Set(readTaskEvents(workspaceRoot, taskId).map((event) => event.id));
+  const existingEvents = readTaskEvents(workspaceRoot, taskId);
+  const existingIds = new Set(existingEvents.map((event) => event.id));
+  
+  // Use a stable stringification for payload comparison
+  const existingSignatures = new Set(
+    existingEvents.map((event) => JSON.stringify({ type: event.type, payload: event.payload }))
+  );
+
   for (const event of events) {
+    const signature = JSON.stringify({ type: event.type, payload: event.payload });
+    if (existingIds.has(event.id) || existingSignatures.has(signature)) {
+      continue; // Skip duplicate events
+    }
+
     const importedEvent = {
       ...event,
       task_id: taskId,
-      id: existingIds.has(event.id) ? createId("imp") : event.id
+      id: event.id // ID is guaranteed new at this point
     };
+    
+    // Add to existing tracking sets to prevent duplicates within the same import payload
+    existingIds.add(importedEvent.id);
+    existingSignatures.add(signature);
+
     assertValidEvent(importedEvent);
     appendJsonLine(taskEventsFile(paths, taskId), importedEvent);
   }

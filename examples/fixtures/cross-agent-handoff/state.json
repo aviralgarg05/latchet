@@ -1,0 +1,166 @@
+{
+  "version": "0.1.0",
+  "generated_at": "2026-06-23T06:29:37.648Z",
+  "task": {
+    "id": "debug-memleak",
+    "title": "Debug memory leak in worker",
+    "goal": "Find and fix OOM error in image processor",
+    "status": "in_progress",
+    "created_at": "2026-06-23T06:29:36.815Z",
+    "updated_at": "2026-06-23T06:29:37.429Z",
+    "workspace_root": "/Users/aviralgarg/Everything/Context Manager/output/test-repo",
+    "git": {
+      "root": "/Users/aviralgarg/Everything/Context Manager",
+      "branch": "main",
+      "commit": "166fe9a1d62940f5fd446a13eb567721059ec510",
+      "dirty": true
+    }
+  },
+  "counts": {
+    "total_events": 7,
+    "active_decisions": 2,
+    "open_failures": 1,
+    "env_quirks": 1,
+    "open_questions": 0
+  },
+  "active_constraints": [],
+  "active_decisions": [
+    {
+      "id": "codex_import_1",
+      "task_id": "debug-memleak",
+      "timestamp": "2026-01-01T00:00:01.000Z",
+      "actor": {
+        "kind": "assistant",
+        "name": "codex-importer"
+      },
+      "source": {
+        "kind": "session",
+        "provider": "codex",
+        "reference": "structured-session-summary"
+      },
+      "verification": {
+        "status": "model_inferred"
+      },
+      "type": "decision",
+      "payload": {
+        "summary": "Switched to worker_threads instead of clustering",
+        "status": "accepted"
+      }
+    },
+    {
+      "id": "evt_12c5da0f-1370-44b7-bd8c-467dbadf0e3a",
+      "task_id": "debug-memleak",
+      "timestamp": "2026-06-23T06:29:37.017Z",
+      "actor": {
+        "kind": "user",
+        "name": "local-user"
+      },
+      "source": {
+        "kind": "cli",
+        "provider": "latchet"
+      },
+      "type": "decision",
+      "payload": {
+        "summary": "Use heapdump for analysis",
+        "reason": "Standard tools failing",
+        "status": "accepted"
+      },
+      "verification": {
+        "status": "user_asserted"
+      }
+    }
+  ],
+  "recent_failures": [
+    {
+      "id": "evt_19aaa216-20b2-43c1-9239-b3d4bbb4ff96",
+      "task_id": "debug-memleak",
+      "timestamp": "2026-06-23T06:29:37.157Z",
+      "actor": {
+        "kind": "user",
+        "name": "local-user"
+      },
+      "source": {
+        "kind": "cli",
+        "provider": "latchet"
+      },
+      "type": "failure",
+      "payload": {
+        "summary": "Heapdump failed in production",
+        "error": "OOM happens before snapshot completes",
+        "status": "open"
+      },
+      "verification": {
+        "status": "user_asserted"
+      }
+    }
+  ],
+  "active_env_quirks": [
+    {
+      "id": "evt_3aeafc87-4187-4fc6-8feb-0fb4d4ff5fd7",
+      "task_id": "debug-memleak",
+      "timestamp": "2026-06-23T06:29:37.298Z",
+      "actor": {
+        "kind": "user",
+        "name": "local-user"
+      },
+      "source": {
+        "kind": "cli",
+        "provider": "latchet"
+      },
+      "type": "env_quirk",
+      "payload": {
+        "summary": "Must use NODE_OPTIONS=--max-old-space-size=4096 locally"
+      },
+      "verification": {
+        "status": "user_asserted"
+      }
+    }
+  ],
+  "open_questions": [],
+  "next_action": {
+    "id": "evt_52ef27c2-727e-4c7d-8088-6c080ed8acf1",
+    "task_id": "debug-memleak",
+    "timestamp": "2026-06-23T06:29:37.429Z",
+    "actor": {
+      "kind": "user",
+      "name": "local-user"
+    },
+    "source": {
+      "kind": "cli",
+      "provider": "latchet"
+    },
+    "type": "next_action",
+    "payload": {
+      "summary": "Reproduce with smaller payloads locally",
+      "priority": "high"
+    },
+    "verification": {
+      "status": "user_asserted"
+    }
+  },
+  "blockers": [
+    "Heapdump failed in production"
+  ],
+  "artifact_refs": [],
+  "notes": [],
+  "freshness": {
+    "ok": true,
+    "checks": [
+      {
+        "kind": "git_branch",
+        "ok": true,
+        "message": "Expected branch main, current branch is main."
+      },
+      {
+        "kind": "git_commit",
+        "ok": true,
+        "message": "Expected commit 166fe9a1d62940f5fd446a13eb567721059ec510, current commit is 166fe9a1d62940f5fd446a13eb567721059ec510."
+      },
+      {
+        "kind": "workspace_root",
+        "ok": true,
+        "message": "Workspace root /Users/aviralgarg/Everything/Context Manager/output/test-repo is available."
+      }
+    ]
+  }
+}

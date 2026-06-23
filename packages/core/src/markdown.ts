@@ -28,6 +28,15 @@ export function renderStateMarkdown(state: TaskState): string {
       )
     ),
     "",
+    "## Recent Attempts",
+    renderList(
+      state.recent_attempts?.map((event) => {
+        const suffix = event.payload.outcome ? ` — ${event.payload.outcome}` : "";
+        const result = event.payload.result ?? "unknown";
+        return `[${result}] ${event.payload.summary}${suffix}`;
+      }) ?? []
+    ),
+    "",
     "## Recent Failures",
     renderList(
       state.recent_failures.map((event) => {

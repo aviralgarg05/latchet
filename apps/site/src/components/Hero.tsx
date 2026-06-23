@@ -1,14 +1,32 @@
-import { statePreview } from "../content";
+import { useEffect, useRef, useState } from "react";
+import { statePreview, heroEvents } from "../content";
 
 export function Hero() {
+  const [activeTab, setActiveTab] = useState("state.md");
+  
   return (
-    <section className="hero" id="top">
+    <section className="hero reveal" id="top">
       <div className="hero__copy">
         <p className="eyebrow">Local-first task ledger</p>
-        <h1>Same task state across every coding agent.</h1>
+        <h1>
+          Same task state across <span className="accent-word">every</span> coding agent.
+        </h1>
         <p className="hero__lede">
           Latchet stores decisions, failed attempts, environment quirks, and the next action in <code>.taskledger/</code> — so Codex, Claude Code, and Cursor resume from durable state, not chat residue.
         </p>
+        
+        <div className="event-cards">
+          {heroEvents.slice(0, 3).map((event) => (
+            <div className={`event-card event-card--${event.accent}`} key={event.id}>
+              <span className="event-card__label">{event.label}</span>
+              <div>
+                <h3 className="event-card__title">{event.title}</h3>
+                <p className="event-card__summary">{event.summary}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
         <div className="hero__actions">
           <a className="button button--primary" href="https://github.com/aviralgarg05/latchet" target="_blank" rel="noreferrer">
             Get started
@@ -25,21 +43,34 @@ export function Hero() {
 
       <aside className="preview-panel" aria-label="Task state preview">
         <div className="preview-panel__chrome">
+          <div className="preview-panel__dots">
+            <div className="preview-panel__dot" style={{ background: 'var(--red)' }}></div>
+            <div className="preview-panel__dot" style={{ background: 'var(--amber)' }}></div>
+            <div className="preview-panel__dot" style={{ background: 'var(--accent)' }}></div>
+          </div>
           <div className="preview-panel__path">
             <span className="preview-panel__path-segment">.taskledger</span>
             <span className="preview-panel__path-segment">tasks</span>
             <span className="preview-panel__path-segment preview-panel__path-segment--active">tenant-auth</span>
           </div>
           <div className="preview-panel__tabs">
-            <span className="preview-panel__tab preview-panel__tab--active">state.md</span>
-            <span className="preview-panel__tab">events.jsonl</span>
-            <span className="preview-panel__tab">state.json</span>
+            {["state.md", "events.jsonl", "state.json"].map(tab => (
+              <button 
+                key={tab}
+                className={`preview-panel__tab ${activeTab === tab ? "preview-panel__tab--active" : ""}`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab}
+              </button>
+            ))}
           </div>
         </div>
-        <pre className="preview-panel__content">{statePreview}</pre>
+        <pre className="preview-panel__content">
+          {activeTab === "state.md" ? statePreview : "Select a tab to view content..."}
+        </pre>
         <div className="preview-panel__status">
-          <span>branch main</span>
-          <span>3 open failures blocked</span>
+          <span className="status-ok">● branch main</span>
+          <span className="preview-warn">1 open failure blocked</span>
           <span>freshness: 2 checks</span>
         </div>
       </aside>
