@@ -16,7 +16,7 @@ import { getGitSnapshot } from "./git.js";
 import { stateToSyntheticEvents } from "./importers.js";
 import { renderStateMarkdown } from "./markdown.js";
 import { deriveTaskState } from "./projector.js";
-import { redactState, type RedactionOptions } from "./redact.js";
+import { redactState, redactHandoff, type RedactionOptions } from "./redact.js";
 import { verifyTaskFreshness } from "./verify.js";
 import {
   appendJsonLine,
@@ -280,7 +280,8 @@ export function exportTask(
 ): ReturnType<typeof createHandoffPack> {
   const state = readTaskState(workspaceRoot, taskId);
   const derivedState = redactionOptions ? redactState(state, redactionOptions) : state;
-  return createHandoffPack(derivedState, includeEvents ? readTaskEvents(workspaceRoot, taskId) : undefined);
+  const pack = createHandoffPack(derivedState, includeEvents ? readTaskEvents(workspaceRoot, taskId) : undefined);
+  return redactionOptions ? redactHandoff(pack, redactionOptions) : pack;
 }
 
 export function importTaskData(workspaceRoot: string, taskId: string, data: unknown): TaskState {

@@ -198,6 +198,27 @@ test("redaction strips paths and obvious secrets", () => {
     assert.equal(redacted.artifact_refs[0]?.payload.path, "[REDACTED_PATH]");
     assert.equal(redacted.artifact_refs[0]?.payload.revision, undefined);
     assert.ok(redacted.notes[0]?.payload.summary.includes("[REDACTED_TOKEN]"));
+
+    const handoff = exportTask(dir, "share", true, {
+      removePaths: true,
+      removeRevisions: true,
+      maskSecrets: true
+    });
+
+    assert.equal(handoff.state.artifact_refs[0]?.payload.path, "[REDACTED_PATH]");
+    assert.equal(handoff.state.artifact_refs[0]?.payload.revision, undefined);
+    assert.ok(handoff.state.notes[0]?.payload.summary.includes("[REDACTED_TOKEN]"));
+
+    assert.ok(handoff.events);
+    const artEvent = handoff.events.find(e => e.type === "artifact_ref");
+    const noteEvent = handoff.events.find(e => e.type === "note");
+
+    const artPayload = artEvent?.payload as any;
+    const notePayload = noteEvent?.payload as any;
+
+    assert.equal(artPayload?.path, "[REDACTED_PATH]");
+    assert.equal(artPayload?.revision, undefined);
+    assert.ok(notePayload?.summary.includes("[REDACTED_TOKEN]"));
   });
 });
 
