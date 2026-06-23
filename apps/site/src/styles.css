@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap");
 
 /* ── Design tokens ── */
 :root {
@@ -36,8 +36,8 @@
   --blue-dim: rgba(85, 136, 255, 0.1);
 
   /* Typography */
-  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: "Geist", "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
 
   /* Spacing & layout */
   --container: 1100px;
@@ -65,7 +65,56 @@ code, pre { font-family: var(--font-mono); }
 button { appearance: none; font-family: inherit; border: none; cursor: pointer; }
 img { max-width: 100%; display: block; }
 
-.page-shell { min-height: 100vh; }
+.page-shell {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── Interactive Grid & Glow Orbs ── */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center;
+  mask-image: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), black, transparent 45%);
+  -webkit-mask-image: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), black, transparent 45%);
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.glow-orb {
+  position: fixed;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 212, 170, 0.06) 0%, transparent 70%);
+  filter: blur(60px);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -2;
+}
+
+.glow-orb--1 {
+  top: -100px;
+  left: -100px;
+  animation: float-slow 25s infinite alternate;
+}
+
+.glow-orb--2 {
+  bottom: -200px;
+  right: -100px;
+  animation: float-slow 30s infinite alternate-reverse;
+}
+
+@keyframes float-slow {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(60px, -80px) scale(1.15); }
+  100% { transform: translate(-40px, 40px) scale(0.9); }
+}
 
 /* ── Scroll reveal animation ── */
 .reveal {
@@ -182,8 +231,14 @@ img { max-width: 100%; display: block; }
 }
 
 .site-nav a:hover,
-.site-nav a:focus-visible {
+.site-nav a:focus-visible,
+.site-nav a.site-nav__link--active {
   color: var(--text);
+}
+
+.site-nav a.site-nav__link--active::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 .site-header__actions {
@@ -649,6 +704,11 @@ img { max-width: 100%; display: block; }
   background: var(--surface-raised);
 }
 
+.feature-card:hover .feature-card__icon {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 16px currentColor;
+}
+
 .feature-card__icon {
   width: 36px;
   height: 36px;
@@ -657,6 +717,7 @@ img { max-width: 100%; display: block; }
   justify-content: center;
   border-radius: 8px;
   margin-bottom: 16px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .feature-card__icon--accent {
@@ -725,18 +786,25 @@ img { max-width: 100%; display: block; }
 }
 
 .pipeline {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr auto auto auto 1fr;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
   position: relative;
 }
 
-.pipeline__sources,
+.pipeline__sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
 .pipeline__outputs {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  justify-content: flex-start;
 }
 
 .pipeline__chip {
@@ -1232,8 +1300,15 @@ img { max-width: 100%; display: block; }
   .site-header__meta { display: none; }
 
   .pipeline {
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .pipeline__sources,
+  .pipeline__outputs {
+    justify-content: center;
   }
 
   .pipeline__arrow { transform: rotate(90deg); }
@@ -1292,6 +1367,16 @@ img { max-width: 100%; display: block; }
     align-items: flex-start;
     gap: 12px;
   }
+}
+
+/* ── Docs Page Layout Override ── */
+.docs-page {
+  padding-top: 48px;
+  padding-bottom: 96px;
+}
+
+.docs-page .docs {
+  padding-top: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
