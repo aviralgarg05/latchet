@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap");
 
 /* ── Design tokens ── */
 :root {
@@ -37,6 +37,7 @@
 
   /* Typography */
   --font-sans: "Geist", "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Space Grotesk", var(--font-sans);
   --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
 
   /* Spacing & layout */
@@ -64,6 +65,17 @@ a { color: inherit; text-decoration: none; }
 code, pre { font-family: var(--font-mono); }
 button { appearance: none; font-family: inherit; border: none; cursor: pointer; }
 img { max-width: 100%; display: block; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+.brand__wordmark,
+.site-footer__brand-name,
+.button,
+.eyebrow {
+  font-family: var(--font-display);
+}
 
 .page-shell {
   min-height: 100vh;
@@ -96,6 +108,8 @@ img { max-width: 100%; display: block; }
   border-radius: 50%;
   pointer-events: none;
   z-index: -2;
+  margin-top: calc(var(--scroll-y, 0px) * -0.15);
+  transition: margin-top 0.1s ease-out;
 }
 
 .glow-orb--1 {
@@ -114,6 +128,94 @@ img { max-width: 100%; display: block; }
   0% { transform: translate(0, 0) scale(1); }
   50% { transform: translate(60px, -80px) scale(1.15); }
   100% { transform: translate(-40px, 40px) scale(0.9); }
+}
+
+/* ── Custom Pointer ── */
+.custom-cursor-dot,
+.custom-cursor-ring {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: none;
+  }
+  a, button, [role='button'], .install-block, .preview-panel__tab {
+    cursor: none;
+  }
+
+  .custom-cursor-dot {
+    display: block;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    transition: width 0.15s ease, height 0.15s ease, opacity 0.15s ease;
+  }
+
+  .custom-cursor-ring {
+    display: block;
+    width: 24px;
+    height: 24px;
+    border: 1.5px solid rgba(0, 212, 170, 0.4);
+    border-radius: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9998;
+    transition: width 0.25s cubic-bezier(0.25, 1, 0.5, 1), height 0.25s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .custom-cursor-ring--hover {
+    width: 44px;
+    height: 44px;
+    background: var(--accent-dim);
+    border-color: var(--accent);
+  }
+
+  .custom-cursor-dot--hover {
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+}
+
+/* ── Floating Particles ── */
+.particles-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: float-particle linear infinite;
+}
+
+@keyframes float-particle {
+  0% {
+    transform: translateY(105vh) scale(0.5);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.12;
+  }
+  85% {
+    opacity: 0.12;
+  }
+  100% {
+    transform: translateY(-10vh) scale(1.2);
+    opacity: 0;
+  }
 }
 
 /* ── Scroll reveal animation ── */
