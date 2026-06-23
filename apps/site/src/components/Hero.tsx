@@ -65,17 +65,18 @@ export function Hero() {
             <span className="preview-panel__path-segment">tasks</span>
             <span className="preview-panel__path-segment preview-panel__path-segment--active">tenant-auth</span>
           </div>
-          <div className="preview-panel__tabs">
-            {["state.md", "events.jsonl", "state.json"].map(tab => (
-              <button 
-                key={tab}
-                className={`preview-panel__tab ${activeTab === tab ? "preview-panel__tab--active" : ""}`}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
+        </div>
+
+        <div className="preview-panel__tab-bar">
+          {["state.md", "events.jsonl", "state.json"].map(tab => (
+            <button 
+              key={tab}
+              className={`preview-panel__tab ${activeTab === tab ? "preview-panel__tab--active" : ""}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
         <pre className="preview-panel__content">
           {activeTab === "state.md" && statePreview}

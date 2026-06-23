@@ -565,8 +565,8 @@ h1, h2, h3, h4, h5, h6 {
 .preview-panel__chrome {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: flex-start;
+  gap: 16px;
   padding: 10px 16px;
   border-bottom: 1px solid var(--border);
   background: var(--bg-elevated);
@@ -575,6 +575,7 @@ h1, h2, h3, h4, h5, h6 {
 .preview-panel__dots {
   display: flex;
   gap: 6px;
+  flex-shrink: 0;
 }
 
 .preview-panel__dot {
@@ -590,8 +591,9 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--text-tertiary);
-  flex: 1;
-  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .preview-panel__path-segment::before {
@@ -608,23 +610,37 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--accent);
 }
 
-.preview-panel__tabs {
+.preview-panel__tab-bar {
   display: flex;
-  gap: 2px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  padding: 0 12px;
+  gap: 4px;
+  overflow-x: auto;
 }
 
 .preview-panel__tab {
-  padding: 3px 10px;
-  border-radius: 4px;
-  color: var(--text-tertiary);
+  padding: 8px 14px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-secondary);
   font-family: var(--font-mono);
   font-size: 0.7rem;
+  border-radius: 0;
   transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.preview-panel__tab:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .preview-panel__tab--active {
-  background: var(--accent-dim);
+  border-bottom-color: var(--accent);
   color: var(--accent);
+  background: var(--surface);
 }
 
 .preview-panel__content {
@@ -897,16 +913,16 @@ h1, h2, h3, h4, h5, h6 {
 
 .pipeline__sources {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 8px;
-  justify-content: flex-end;
+  align-items: flex-end;
 }
 
 .pipeline__outputs {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 8px;
-  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .pipeline__chip {
@@ -1410,7 +1426,10 @@ h1, h2, h3, h4, h5, h6 {
 
   .pipeline__sources,
   .pipeline__outputs {
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
   }
 
   .pipeline__arrow { transform: rotate(90deg); }
