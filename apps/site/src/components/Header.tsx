@@ -5,7 +5,8 @@ const nav = [
   { href: "#why", label: "Problem" },
   { href: "#features", label: "Features" },
   { href: "#workflow", label: "Workflow" },
-  { href: "#tooling", label: "CLI" }
+  { href: "#tooling", label: "CLI" },
+  { href: "#docs", label: "Docs" }
 ];
 
 export function Header() {

@@ -7,6 +7,7 @@ import { OpenSourceSection } from "./components/OpenSourceSection";
 import { StorySection } from "./components/StorySection";
 import { ToolingSection } from "./components/ToolingSection";
 import { WorkflowSection } from "./components/WorkflowSection";
+import { DocsSection } from "./components/DocsSection";
 
 function App() {
   useEffect(() => {
@@ -40,6 +41,7 @@ function App() {
         <FeatureGrid />
         <WorkflowSection />
         <ToolingSection />
+        <DocsSection />
         <OpenSourceSection />
         <FooterCta />
       </main>

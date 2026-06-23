@@ -1,8 +1,15 @@
-import { useEffect, useRef, useState } from "react";
-import { statePreview, heroEvents } from "../content";
+import { useState } from "react";
+import { statePreview, eventsPreview, jsonPreview, heroEvents } from "../content";
 
 export function Hero() {
   const [activeTab, setActiveTab] = useState("state.md");
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText("npm install && npm run build && node packages/cli/dist/index.js init");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
   
   return (
     <section className="hero reveal" id="top">
@@ -35,8 +42,13 @@ export function Hero() {
             How it works
           </a>
         </div>
-        <div className="install-block">
-          <span className="install-block__label">Quickstart</span>
+        <div className="install-block" onClick={handleCopy} style={{ cursor: 'pointer' }} title="Click to copy command">
+          <div className="install-block__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <span className="install-block__label" style={{ margin: 0 }}>Quickstart</span>
+            <span className="install-block__copy-text" style={{ fontSize: '0.7rem', color: copied ? 'var(--accent)' : 'var(--text-tertiary)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              {copied ? "Copied!" : "Click to copy"}
+            </span>
+          </div>
           <code>npm install && npm run build && node packages/cli/dist/index.js init</code>
         </div>
       </div>
@@ -66,7 +78,9 @@ export function Hero() {
           </div>
         </div>
         <pre className="preview-panel__content">
-          {activeTab === "state.md" ? statePreview : "Select a tab to view content..."}
+          {activeTab === "state.md" && statePreview}
+          {activeTab === "events.jsonl" && eventsPreview}
+          {activeTab === "state.json" && jsonPreview}
         </pre>
         <div className="preview-panel__status">
           <span className="status-ok">● branch main</span>
