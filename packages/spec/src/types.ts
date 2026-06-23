@@ -206,6 +206,9 @@ export interface TaskState {
   artifact_refs: LedgerEvent<ArtifactRefPayload>[];
   notes: LedgerEvent<NotePayload>[];
   freshness?: FreshnessReport;
+  integrity?: {
+    event_log_hash: string;
+  };
 }
 
 export interface HandoffPack {

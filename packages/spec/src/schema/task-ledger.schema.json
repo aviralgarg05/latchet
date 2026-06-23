@@ -183,5 +183,259 @@
       "additionalProperties": false
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "decision" }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "required": ["summary"],
+            "properties": {
+              "summary": { "type": "string", "minLength": 1 },
+              "reason": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": ["proposed", "accepted", "rejected", "superseded"]
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "attempt" }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "required": ["summary"],
+            "properties": {
+              "summary": { "type": "string", "minLength": 1 },
+              "outcome": { "type": "string" },
+              "result": {
+                "type": "string",
+                "enum": ["success", "failure", "partial"]
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "failure" }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "required": ["summary"],
+            "properties": {
+              "summary": { "type": "string", "minLength": 1 },
+              "error": { "type": "string" },
+              "suspected_cause": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": ["open", "resolved"]
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "env_quirk" }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "required": ["summary"],
+            "properties": {
+              "summary": { "type": "string", "minLength": 1 },
+              "impact": { "type": "string" },
+              "workaround": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "constraint" }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "required": ["summary"],
+            "properties": {
+              "summary": { "type": "string", "minLength": 1 }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "artifact_ref" }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "required": ["path"],
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "revision": { "type": "string" },
+              "exists": { "type": "boolean" },
+              "note": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "open_question" }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "required": ["question"],
+            "properties": {
+              "question": { "type": "string", "minLength": 1 },
+              "owner": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "next_action" }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "required": ["summary"],
+            "properties": {
+              "summary": { "type": "string", "minLength": 1 },
+              "priority": {
+                "type": "string",
+                "enum": ["low", "medium", "high"]
+              },
+              "prerequisites": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "status_change" }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "required": ["to"],
+            "properties": {
+              "to": {
+                "type": "string",
+                "enum": ["todo", "in_progress", "blocked", "done"]
+              },
+              "from": {
+                "type": "string",
+                "enum": ["todo", "in_progress", "blocked", "done"]
+              },
+              "reason": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "note" }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "required": ["summary"],
+            "properties": {
+              "summary": { "type": "string", "minLength": 1 }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": { "const": "evidence" }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "required": ["summary"],
+            "properties": {
+              "summary": { "type": "string", "minLength": 1 },
+              "kind": {
+                "type": "string",
+                "enum": ["log", "otel", "test", "command", "session"]
+              },
+              "details": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  ]
 }

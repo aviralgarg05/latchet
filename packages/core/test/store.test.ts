@@ -1,6 +1,7 @@
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync, appendFileSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { createHash } from "node:crypto";
 import test from "node:test";
 import assert from "node:assert/strict";
 import type { LedgerEvent, TaskMetadata, TaskState } from "@latchet/spec";
@@ -269,4 +270,78 @@ test("duplicate import / dedupe correctly drops identical events", () => {
     assert.equal(afterFourth.length, 3);
   });
 });
+
+test("invalid payloads are rejected by AJV schema", () => {
+  withTempDir((dir) => {
+    createTask(dir, {
+      id: "val-task",
+      title: "Validation test",
+      goal: "Check payload validations"
+    });
+
+    // decision missing summary
+    assert.throws(() => {
+      appendEvent(dir, {
+        task_id: "val-task",
+        type: "decision",
+        payload: { status: "accepted" } as any
+      });
+    }, /must have required property 'summary'/);
+
+    // next_action with invalid priority
+    assert.throws(() => {
+      appendEvent(dir, {
+        task_id: "val-task",
+        type: "next_action",
+        payload: { summary: "Do something", priority: "super-high" } as any
+      });
+    }, /must be equal to one of the allowed values/);
+  });
+});
+
+test("cache mismatch triggers self-healing re-derivation", () => {
+  withTempDir((dir) => {
+    createTask(dir, {
+      id: "self-heal-task",
+      title: "Self-healing test",
+      goal: "Check integrity self-healing"
+    });
+
+    appendEvent(dir, {
+      task_id: "self-heal-task",
+      type: "decision",
+      payload: { summary: "Original decision", status: "accepted" }
+    });
+
+    // Read state before tampering
+    const beforeState = readTaskState(dir, "self-heal-task");
+    assert.equal(beforeState.active_decisions.length, 1);
+    assert.ok(beforeState.integrity?.event_log_hash);
+
+    // Append an event directly to the file to bypass normal write path and trigger mismatch
+    const tamperedEvent = {
+      id: "evt-tampered",
+      task_id: "self-heal-task",
+      timestamp: "2026-06-23T20:00:00.000Z",
+      actor: { kind: "user" as const, name: "tamperer" },
+      source: { kind: "manual" as const },
+      type: "note" as const,
+      payload: { summary: "Tampered note" },
+      verification: { status: "user_asserted" as const }
+    };
+    
+    const eventsFile = join(dir, ".taskledger", "tasks", "self-heal-task", "events.jsonl");
+    appendFileSync(eventsFile, JSON.stringify(tamperedEvent) + "\n", "utf8");
+
+    // Read state, it should self-heal and include the tampered note
+    const afterState = readTaskState(dir, "self-heal-task");
+    assert.equal(afterState.notes.length, 1);
+    assert.equal(afterState.notes[0]?.payload.summary, "Tampered note");
+
+    // Check that the new integrity hash matches the current file hash
+    const expectedHash = createHash("sha256").update(tamperedEvent ? readFileSync(eventsFile) : "").digest("hex");
+    assert.equal(afterState.integrity?.event_log_hash, expectedHash);
+  });
+});
+
 

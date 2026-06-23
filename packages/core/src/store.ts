@@ -20,6 +20,7 @@ import { redactState, type RedactionOptions } from "./redact.js";
 import { verifyTaskFreshness } from "./verify.js";
 import {
   appendJsonLine,
+  computeFileHash,
   createId,
   ensureDir,
   fileExists,
@@ -140,7 +141,6 @@ export function createTask(workspaceRoot: string, input: CreateTaskInput): TaskS
   mkdirSync(dir, { recursive: true });
   mkdirSync(taskAttachmentsDir(paths, input.id), { recursive: true });
   const eventsFile = taskEventsFile(paths, input.id);
-  const stateMarkdownPath = taskStateMarkdownFile(paths, input.id);
   const initialTask: TaskMetadata = {
     id: input.id,
     title: input.title,
@@ -157,86 +157,59 @@ export function createTask(workspaceRoot: string, input: CreateTaskInput): TaskS
     freshness: verifyTaskFreshness(workspaceRoot, state)
   };
   writeFileSync(eventsFile, "", "utf8");
-  writeJson(taskStateJsonFile(paths, input.id), verified);
+  const finalState = writeTaskState(workspaceRoot, input.id, verified);
   writeProject(workspaceRoot, {
     ...project,
     current_task_id: input.id
   });
-  writeFileSync(stateMarkdownPath, `${renderStateMarkdown(verified)}\n`, "utf8");
-  return verified;
+  return finalState;
 }
 
-export function readTaskState(workspaceRoot: string, taskId: string): TaskState {
-  const statePath = taskStateJsonFile(getLedgerPaths(workspaceRoot), taskId);
+export function readTaskState(
+  workspaceRoot: string,
+  taskId: string,
+  bypassIntegrity = false
+): TaskState {
+  const paths = getLedgerPaths(workspaceRoot);
+  const statePath = taskStateJsonFile(paths, taskId);
   if (!fileExists(statePath)) {
     throw new LedgerError(`Task state not found for ${taskId}`);
   }
-  return readJson<TaskState>(statePath);
+  const state = readJson<TaskState>(statePath);
+  if (!bypassIntegrity) {
+    const eventsPath = taskEventsFile(paths, taskId);
+    const currentHash = computeFileHash(eventsPath);
+    const storedHash = state.integrity?.event_log_hash;
+    if (currentHash !== storedHash) {
+      return deriveAndPersist(workspaceRoot, taskId);
+    }
+  }
+  return state;
 }
 
 export function readTaskEvents(workspaceRoot: string, taskId: string): LedgerEvent[] {
   return readJsonLines<LedgerEvent>(taskEventsFile(getLedgerPaths(workspaceRoot), taskId));
 }
 
-function writeTaskState(workspaceRoot: string, taskId: string, state: TaskState): void {
+function writeTaskState(workspaceRoot: string, taskId: string, state: TaskState): TaskState {
   const paths = getLedgerPaths(workspaceRoot);
-  writeJson(taskStateJsonFile(paths, taskId), state);
-  writeFileSync(taskStateMarkdownFile(paths, taskId), `${renderStateMarkdown(state)}\n`, "utf8");
+  const eventsFile = taskEventsFile(paths, taskId);
+  const hash = computeFileHash(eventsFile);
+  const stateWithHash: TaskState = {
+    ...state,
+    integrity: {
+      event_log_hash: hash
+    }
+  };
+  writeJson(taskStateJsonFile(paths, taskId), stateWithHash);
+  writeFileSync(taskStateMarkdownFile(paths, taskId), `${renderStateMarkdown(stateWithHash)}\n`, "utf8");
+  return stateWithHash;
 }
 
 function assertValidEvent(event: LedgerEvent): void {
-  const schemaEvent = {
-    ...event,
-    payload: {}
-  };
-  if (!validateEvent(schemaEvent)) {
+  if (!validateEvent(event)) {
     const message = ajv.errorsText(validateEvent.errors);
     throw new LedgerError(`Invalid event: ${message}`);
-  }
-  switch (event.type) {
-    case "decision":
-      if (!("summary" in event.payload) || typeof event.payload.summary !== "string") {
-        throw new LedgerError("Invalid event payload: decision requires summary.");
-      }
-      break;
-    case "attempt":
-      if (!("summary" in event.payload) || typeof event.payload.summary !== "string") {
-        throw new LedgerError("Invalid event payload: attempt requires summary.");
-      }
-      break;
-    case "failure":
-      if (!("summary" in event.payload) || typeof event.payload.summary !== "string") {
-        throw new LedgerError("Invalid event payload: failure requires summary.");
-      }
-      break;
-    case "env_quirk":
-    case "constraint":
-    case "note":
-    case "evidence":
-      if (!("summary" in event.payload) || typeof event.payload.summary !== "string") {
-        throw new LedgerError(`Invalid event payload: ${event.type} requires summary.`);
-      }
-      break;
-    case "artifact_ref":
-      if (!("path" in event.payload) || typeof event.payload.path !== "string") {
-        throw new LedgerError("Invalid event payload: artifact_ref requires path.");
-      }
-      break;
-    case "open_question":
-      if (!("question" in event.payload) || typeof event.payload.question !== "string") {
-        throw new LedgerError("Invalid event payload: open_question requires question.");
-      }
-      break;
-    case "next_action":
-      if (!("summary" in event.payload) || typeof event.payload.summary !== "string") {
-        throw new LedgerError("Invalid event payload: next_action requires summary.");
-      }
-      break;
-    case "status_change":
-      if (!("to" in event.payload) || typeof event.payload.to !== "string") {
-        throw new LedgerError("Invalid event payload: status_change requires to.");
-      }
-      break;
   }
 }
 
@@ -283,7 +256,7 @@ export function appendEvent(workspaceRoot: string, input: AppendEventInput): Tas
 }
 
 export function deriveAndPersist(workspaceRoot: string, taskId: string): TaskState {
-  const current = readTaskState(workspaceRoot, taskId);
+  const current = readTaskState(workspaceRoot, taskId, true);
   const state = deriveTaskState(
     current.task,
     readTaskEvents(workspaceRoot, taskId)
@@ -292,8 +265,7 @@ export function deriveAndPersist(workspaceRoot: string, taskId: string): TaskSta
     ...state,
     freshness: verifyTaskFreshness(workspaceRoot, state)
   };
-  writeTaskState(workspaceRoot, taskId, verified);
-  return verified;
+  return writeTaskState(workspaceRoot, taskId, verified);
 }
 
 export function getCurrentTaskState(workspaceRoot = process.cwd()): TaskState {
@@ -327,7 +299,7 @@ export function importTaskData(workspaceRoot: string, taskId: string, data: unkn
     };
     ensureDir(taskDir(paths, taskId));
     ensureDir(taskAttachmentsDir(paths, taskId));
-    writeJson(taskStateJsonFile(paths, taskId), deriveTaskState(importedTask, []));
+    writeTaskState(workspaceRoot, taskId, deriveTaskState(importedTask, []));
     writeProject(workspaceRoot, {
       ...project,
       current_task_id: taskId

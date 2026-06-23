@@ -1,6 +1,6 @@
 import { mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync, appendFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 export function nowIso(): string {
   return new Date().toISOString();
@@ -79,4 +79,12 @@ export function uniqueBy<T>(items: T[], getKey: (item: T) => string): T[] {
 
 export function resolvePath(...parts: string[]): string {
   return join(...parts);
+}
+
+export function computeFileHash(path: string): string {
+  if (!existsSync(path)) {
+    return "";
+  }
+  const content = readFileSync(path);
+  return createHash("sha256").update(content).digest("hex");
 }
